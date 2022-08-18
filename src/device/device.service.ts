@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { Device } from './device.entity';
-import DeviceDetector from 'device-detector-js';
-import geoIp from 'geoip-lite';
+import geoIp = require('geoip-lite');
 import { CreateDeviceDto } from './dto/create-device.dto';
+import DeviceDetector = require('device-detector-js');
 
 @Injectable()
 export class DeviceService {
@@ -34,7 +34,8 @@ export class DeviceService {
     device.os = deviceParse.os.name;
     device.brand = deviceParse.device.brand;
     device.model = deviceParse.device.model;
-    device.location = `${geo.country}/${geo.city}`;
+    if (!geo) device.location = '';
+    else device.location = `${geo?.country ?? ''}/${geo?.city ?? ''}`;
     const createDevice = new this.deviceEntity(device);
     return await createDevice.save();
   }

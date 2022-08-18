@@ -15,8 +15,6 @@ export class Device {
   model: string;
   @Prop()
   location: string;
-  @Prop()
-  user_agent: string;
 
   constructor(device?: Partial<Device>) {
     Object.assign(this, device);
