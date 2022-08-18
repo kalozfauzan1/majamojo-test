@@ -3,7 +3,8 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { Device } from './device.entity';
 import DeviceDetector from 'device-detector-js';
-import geoip from 'geoip-lite';
+import geoIp from 'geoip-lite';
+import { CreateDeviceDto } from './dto/create-device.dto';
 
 @Injectable()
 export class DeviceService {
@@ -13,20 +14,28 @@ export class DeviceService {
   ) {}
 
   async getAllDevice(): Promise<Device[]> {
-    return this.deviceEntity.find();
+    return await this.deviceEntity.find();
   }
 
-  async createDevice(idDevice: string, userAgent: string): Promise<Device[]> {
+  async createDevice(
+    createDeviceDto: CreateDeviceDto,
+    ip: string,
+  ): Promise<Device> {
+    const isExist = await this.deviceEntity.findOne({
+      id_device: createDeviceDto.id_device,
+    });
+    if (isExist) return isExist;
+
     const device = new Device();
     const deviceDetector = new DeviceDetector();
-    const deviceParse = deviceDetector.parse(userAgent);
-    const ip = '207.97.227.239';
-    const geo = geoip.lookup(ip);
-    device.id_device = idDevice;
+    const deviceParse = deviceDetector.parse(createDeviceDto.user_agent);
+    const geo = geoIp.lookup(ip);
+    device.id_device = createDeviceDto.id_device;
     device.os = deviceParse.os.name;
     device.brand = deviceParse.device.brand;
     device.model = deviceParse.device.model;
     device.location = `${geo.country}/${geo.city}`;
-    return this.deviceEntity.find();
+    const createDevice = new this.deviceEntity(device);
+    return await createDevice.save();
   }
 }

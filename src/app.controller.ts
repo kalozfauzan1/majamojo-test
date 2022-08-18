@@ -1,15 +1,13 @@
 import { Controller, Get, Req } from '@nestjs/common';
 import { AppService } from './app.service';
-import { IpDecorator } from './common/ip.decorator';
+import { RealIP } from 'nestjs-real-ip';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(@Req() request): string {
-    const remoteAddress = request.socket.remoteAddress;
-    const remotePort = request.connection.remoteAddress;
-    return `${remoteAddress}-${remotePort}`;
+  getHello(@RealIP() ip: string): string {
+    return ip;
   }
 }
