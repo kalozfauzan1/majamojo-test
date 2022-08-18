@@ -18,7 +18,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 export class DeviceController {
   constructor(private readonly deviceService: DeviceService) {}
 
-  @Get()
+  @Post()
   @ApiOperation({ summary: 'List device' })
   @ApiResponse({
     status: 200,
