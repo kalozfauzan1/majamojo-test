@@ -10,6 +10,7 @@ import {
 import { DeviceService } from './device.service';
 import { Device } from './device.entity';
 import { CreateDeviceDto } from './dto/create-device.dto';
+import { RealIP } from 'nestjs-real-ip';
 
 @Controller('device')
 export class DeviceController {
@@ -24,8 +25,13 @@ export class DeviceController {
   }
 
   @Post('/create')
-  async createUser(@Body() createDeviceDto: CreateDeviceDto, @Res() response) {
-    await this.deviceService.createDevice(createDeviceDto, '');
+  async createUser(
+    @Body() createDeviceDto: CreateDeviceDto,
+    @RealIP() ip: string,
+    @Res() response,
+  ) {
+    console.log(createDeviceDto);
+    await this.deviceService.createDevice(createDeviceDto, ip);
     return response.status(HttpStatus.OK).json({
       code: 200,
       message: 'ok',
