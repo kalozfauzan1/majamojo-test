@@ -2,7 +2,7 @@ import { index, Prop } from '@typegoose/typegoose';
 import { ObjectId } from 'mongoose';
 import { Transform } from '@nestjs/class-transformer';
 
-export class DeviceEntity {
+export class Device {
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
   @Prop()
@@ -18,7 +18,7 @@ export class DeviceEntity {
   @Prop()
   user_agent: string;
 
-  constructor(device?: Partial<DeviceEntity>) {
+  constructor(device?: Partial<Device>) {
     Object.assign(this, device);
   }
 }

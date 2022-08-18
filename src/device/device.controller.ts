@@ -8,7 +8,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { DeviceService } from './device.service';
-import { DeviceEntity } from './device.entity';
+import { Device } from './device.entity';
 
 @Controller('device')
 export class DeviceController {
