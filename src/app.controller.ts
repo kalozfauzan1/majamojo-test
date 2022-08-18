@@ -8,10 +8,8 @@ export class AppController {
 
   @Get()
   getHello(@Req() request): string {
-    const remoteAddress = request.connection.remoteAddress;
-    const remotePort = request.connection.remotePort;
-    const localAddress = request.connection.localAddress;
-    const localPort = request.connection.localPort;
-    return `${remoteAddress}-${remotePort}-${localAddress}-${localPort}`;
+    const remoteAddress = request.socket.remoteAddress;
+    const remotePort = request.connection.remoteAddress;
+    return `${remoteAddress}-${remotePort}`;
   }
 }
